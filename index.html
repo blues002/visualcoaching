@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>턱맨 팀워킹 설문지 - 관리자용</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f8f9ff;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            background: #f8f9ff;
+            border: none;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .survey-form {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+        
+        .question {
+            background: #f8f9ff;
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #4facfe;
+        }
+        
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .radio-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .radio-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .radio-item input {
+            transform: scale(1.3);
+            margin-bottom: 5px;
+        }
+        
+        .radio-item label {
+            display: block;
+            font-size: 0.8em;
+            color: #666;
+            cursor: pointer;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 20px auto;
+            display: block;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .results-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+        }
+        
+        .results-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .results-table tr:hover {
+            background: #f8f9ff;
+        }
+        
+        .stage-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        .stage-forming { background: #ff6b6b; }
+        .stage-storming { background: #ffa726; }
+        .stage-norming { background: #42a5f5; }
+        .stage-performing { background: #66bb6a; }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .export-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 10px 5px;
+        }
+        
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+        
+        .alert {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>턱맨 팀워킹 설문지 관리 시스템</h1>
+            <p>설문 실시 및 결과 분석</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('survey')">설문 실시</button>
+            <button class="tab" onclick="switchTab('results')">결과 관리</button>
+            <button class="tab" onclick="switchTab('analytics')">통계 분석</button>
+        </div>
+        
+        <!-- 설문 실시 탭 -->
+        <div id="survey" class="tab-content active">
+            <h2>📝 새로운 설문 실시</h2>
+            
+            <div class="form-group">
+                <label for="teamName">팀/그룹 이름</label>
+                <input type="text" id="teamName" placeholder="예: 개발팀, 마케팅팀" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="respondentName">응답자 이름</label>
+                <input type="text" id="respondentName" placeholder="응답자 이름 입력" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="respondentRole">직책/역할</label>
+                <select id="respondentRole" required>
+                    <option value="">선택해주세요</option>
+                    <option value="팀장">팀장</option>
+                    <option value="팀원">팀원</option>
+                    <option value="프로젝트 매니저">프로젝트 매니저</option>
+                    <option value="기타">기타</option>
+                </select>
+            </div>
+            
+            <div class="alert alert-warning">
+                <strong>💡 안내:</strong> 아래 32개 문항에 대해 현재 팀의 상황을 가장 잘 나타내는 점수를 선택해 주세요.
+            </div>
+            
+            <form id="surveyForm">
+                <!-- 문항들이 JavaScript로 생성됩니다 -->
+            </form>
+            
+            <button class="submit-btn" onclick="submitSurvey()">설문 제출하기 📊</button>
+        </div>
+        
+        <!-- 결과 관리 탭 -->
+        <div id="results" class="tab-content">
+            <h2>📊 설문 결과 관리</h2>
+            
+            <div style="margin: 20px 0;">
+                <button class="export-btn" onclick="exportToCSV()">📄 CSV로 내보내기</button>
+                <button class="export-btn" onclick="exportToExcel()" style="background: #007bff;">📊 Excel로 내보내기</button>
+                <button class="delete-btn" onclick="clearAllData()" style="float: right;">🗑️ 모든 데이터 삭제</button>
+            </div>
+            
+            <table class="results-table" id="resultsTable">
+                <thead>
+                    <tr>
+                        <th>제출일시</th>
+                        <th>팀명</th>
+                        <th>응답자</th>
+                        <th>직책</th>
+                        <th>현재 단계</th>
+                        <th>점수</th>
+                        <th>관리</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsTableBody">
+                    <!-- 결과들이 JavaScript로 생성됩니다 -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 통계 분석 탭 -->
+        <div id="analytics" class="tab-content">
+            <h2>📈 통계 분석</h2>
+            
+            <div class="stats-grid" id="statsGrid">
+                <!-- 통계가 JavaScript로 생성됩니다 -->
+            </div>
+            
+            <div style="margin: 30px 0;">
+                <canvas id="stageChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 설문 문항들
+        const questions = [
+            "우리는 질서있고 원활한 진행을 위해 정해진 절차를 갖추려고 노력한다",
+            "우리는 당면한 과제에 빨리 착수하며 기획 단계에 너무 많은 시간을 쓰지 않는다",
+            "팀은 우리 모두가 함께한다고 느끼며 팀의 성공이나 실패에 대한 책임을 공유한다",
+            "우리는 목표에 합의하고 과제 수행 방식을 계획하는 철저한 절차를 갖고 있다",
+            "팀원들은 다른 사람에게 도움을 요청하기를 두려워하거나 싫어한다",
+            "우리는 팀의 목표와 목적을 문자 그대로 받아들이며 공유된 이해를 당연시한다",
+            "팀 리더는 질서를 유지하려고 노력하며 당면한 과제에 기여한다",
+            "우리는 고정된 절차가 없으며, 과제나 프로젝트가 진행되면서 절차를 만들어간다",
+            "우리는 많은 아이디어를 만들어내지만, 제대로 듣지 않거나 충분히 이해하지 못한 채 거부하여 결국 많은 아이디어를 사용하지 못한다",
+            "팀원들은 다른 구성원들을 완전히 신뢰하지 않으며 특정 과제를 수행하는 다른 사람들을 면밀히 감시한다",
+            "팀 리더는 우리가 절차를 따르고, 논쟁하지 않으며, 방해하지 않고 요점을 지키도록 한다",
+            "우리는 함께 일하는 것을 즐기며, 충실하고 생산적인 시간을 갖는다",
+            "우리는 서로를 팀의 구성원으로 받아들였다",
+            "팀 리더는 민주적이고 협력적이다",
+            "우리는 목표와 완수해야 할 과제가 무엇인지 지속적으로 정의하려고 노력한다",
+            "많은 팀원들이 프로세스에 대한 자신만의 아이디어를 가지고 있으며 개인적인 의제가 만연하다",
+            "우리는 서로의 강점과 약점을 완전히 받아들인다",
+            "우리가 모두 함께 있을 때 팀원들에게 특정한 역할을 배정한다",
+            "우리는 갈등을 피함으로써 조화를 달성하려고 노력한다",
+            "우리가 하고 있는 일들은 우리가 상상했던 것과 매우 다르며 달성하기 매우 어려워 보인다",
+            "개념과 이슈에 대한 추상적인 토론이 많으며 일부 구성원들은 이런 토론에 대해 조급해한다",
+            "우리는 그룹의 문제들을 해결해 나갈 수 있다",
+            "우리는 실제 이슈에 대해 동의하더라도 많이 다툰다",
+            "팀은 종종 프로젝트나 목표의 원래 범위를 넘어서고 싶어한다",
+            "우리는 다른 사람들의 건설적인 의견에 대해 비판을 표현한다",
+            "팀에 대한 긴밀한 애착이 있다",
+            "우리 모두가 열심히 일하고 있다고 느끼지만 목표 달성을 위해 성취되는 것은 거의 없다",
+            "우리가 설정한 목표들이 이제는 비현실적으로 보인다",
+            "우리의 목표와 이슈에 대해 완전히 확신하지는 않지만, 팀에 속해 있다는 것에 대해 흥분되고 자랑스럽다",
+            "우리는 종종 개인적인 문제들을 서로 나눈다",
+            "당면한 과제에 대한 저항이 많다",
+            "우리는 많은 일을 해낸다"
+        ];
+
+        // 단계 매핑
+        const stageMapping = {
+            forming: [0, 4, 9, 14, 17, 20, 26, 28],
+            storming: [1, 6, 8, 15, 19, 22, 27, 30],
+            norming: [3, 5, 10, 12, 18, 23, 24, 29],
+            performing: [2, 7, 11, 13, 16, 21, 25, 31]
+        };
+
+        const stageNames = {
+            forming: "형성기",
+            storming: "혼란기", 
+            norming: "규범화기",
+            performing: "수행기"
+        };
+
+        // 로컬 스토리지를 이용한 데이터베이스 시뮬레이션
+        function saveResponse(data) {
+            const responses = JSON.parse(localStorage.getItem('tuckmanResponses') || '[]');
+            responses.push(data);
+            localStorage.setItem('tuckmanResponses', JSON.stringify(responses));
+        }
+
+        function getResponses() {
+            return JSON.parse(localStorage.getItem('tuckmanResponses') || '[]');
+        }
+
+        function clearAllResponses() {
+            localStorage.removeItem('tuckmanResponses');
+            loadResults();
+            loadAnalytics();
+        }
+
+        // 탭 전환
+        function switchTab(tabName) {
+            // 모든 탭과 컨텐츠 비활성화
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // 선택된 탭과 컨텐츠 활성화
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            // 결과나 통계 탭이면 데이터 로드
+            if (tabName === 'results') loadResults();
+            if (tabName === 'analytics') loadAnalytics();
+        }
+
+        // 설문 문항 생성
+        function generateSurveyQuestions() {
+            const form = document.getElementById('surveyForm');
+            
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                
+                questionDiv.innerHTML = `
+                    <div class="question-text">${index + 1}. ${question}</div>
+                    <div class="radio-group">
+                        ${[1, 2, 3, 4, 5].map(value => `
+                            <div class="radio-item">
+                                <input type="radio" id="q${index}_${value}" name="q${index}" value="${value}" required>
+                                <label for="q${index}_${value}">${value}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                form.appendChild(questionDiv);
+            });
+        }
+
+        // 설문 제출
+        function submitSurvey() {
+            const teamName = document.getElementById('teamName').value;
+            const respondentName = document.getElementById('respondentName').value;
+            const respondentRole = document.getElementById('respondentRole').value;
+            
+            if (!teamName || !respondentName || !respondentRole) {
+                alert('팀명, 응답자 이름, 직책을 모두 입력해주세요.');
+                return;
+            }
+            
+            const formData = new FormData(document.getElementById('surveyForm'));
+            const answers = [];
+            
+            // 모든 문항 확인
+            for (let i = 0; i < questions.length; i++) {
+                const answer = formData.get(`q${i}`);
+                if (!answer) {
+                    alert(`문항 ${i + 1}번에 답변해 주세요.`);
+                    return;
+                }
+                answers.push(parseInt(answer));
+            }
+            
+            // 점수 계산
+            const scores = {};
+            for (const [stage, questionIndices] of Object.entries(stageMapping)) {
+                scores[stage] = questionIndices.reduce((sum, qIndex) => sum + answers[qIndex], 0);
+            }
+            
+            const highestStage = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+            
+            // 데이터 저장
+            const responseData = {
+                timestamp: new Date().toLocaleString('ko-KR'),
+                teamName,
+                respondentName,
+                respondentRole,
+                answers,
+                scores,
+                currentStage: highestStage,
+                highestScore: scores[highestStage]
+            };
+            
+            saveResponse(responseData);
+            
+            alert(`설문이 제출되었습니다!\n현재 팀 단계: ${stageNames[highestStage]} (${scores[highestStage]}점)`);
+            
+            // 폼 리셋
+            document.getElementById('surveyForm').reset();
+            document.getElementById('teamName').value = '';
+            document.getElementById('respondentName').value = '';
+            document.getElementById('respondentRole').value = '';
+        }
+
+        // 결과 테이블 로드
+        function loadResults() {
+            const responses = getResponses();
+            const tbody = document.getElementById('resultsTableBody');
+            
+            tbody.innerHTML = responses.map((response, index) => `
+                <tr>
+                    <td>${response.timestamp}</td>
+                    <td>${response.teamName}</td>
+                    <td>${response.respondentName}</td>
+                    <td>${response.respondentRole}</td>
+                    <td><span class="stage-badge stage-${response.currentStage}">${stageNames[response.currentStage]}</span></td>
+                    <td>${response.highestScore}/40</td>
+                    <td><button class="delete-btn" onclick="deleteResponse(${index})">삭제</button></td>
+                </tr>
+            `).join('');
+        }
+
+        // 응답 삭제
+        function deleteResponse(index) {
+            if (confirm('이 응답을 삭제하시겠습니까?')) {
+                const responses = getResponses();
+                responses.splice(index, 1);
+                localStorage.setItem('tuckmanResponses', JSON.stringify(responses));
+                loadResults();
+                loadAnalytics();
+            }
+        }
+
+        // 통계 분석 로드
+        function loadAnalytics() {
+            const responses = getResponses();
+            const statsGrid = document.getElementById('statsGrid');
+            
+            if (responses.length === 0) {
+                statsGrid.innerHTML = '<div class="alert alert-warning">아직 수집된 데이터가 없습니다.</div>';
+                return;
+            }
+            
+            // 기본 통계
+            const totalResponses = responses.length;
+            const uniqueTeams = [...new Set(responses.map(r => r.teamName))].length;
+            
+            // 단계별 통계
+            const stageStats = {
+                forming: 0,
+                storming: 0,
+                norming: 0,
+                performing: 0
+            };
+            
+            responses.forEach(response => {
+                stageStats[response.currentStage]++;
+            });
+            
+            // 평균 점수
+            const avgScores = {};
+            for (const stage in stageNames) {
+                const stageResponses = responses.filter(r => r.currentStage === stage);
+                avgScores[stage] = stageResponses.length > 0 
+                    ? (stageResponses.reduce((sum, r) => sum + r.highestScore, 0) / stageResponses.length).toFixed(1)
+                    : 0;
+            }
+            
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${totalResponses}</div>
+                    <div class="stat-label">총 응답 수</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${uniqueTeams}</div>
+                    <div class="stat-label">참여 팀 수</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stageStats.performing}</div>
+                    <div class="stat-label">수행기 팀</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${Math.max(...Object.values(avgScores))}점</div>
+                    <div class="stat-label">최고 평균 점수</div>
+                </div>
+            `;
+        }
+
+        // CSV 내보내기
+        function exportToCSV() {
+            const responses = getResponses();
+            if (responses.length === 0) {
+                alert('내보낼 데이터가 없습니다.');
+                return;
+            }
+            
+            const headers = ['제출일시', '팀명', '응답자', '직책', '현재단계', '점수', '형성기점수', '혼란기점수', '규범화기점수', '수행기점수'];
+            const csvContent = [
+                headers.join(','),
+                ...responses.map(r => [
+                    r.timestamp,
+                    r.teamName,
+                    r.respondentName,
+                    r.respondentRole,
+                    stageNames[r.currentStage],
+                    r.highestScore,
+                    r.scores.forming,
+                    r.scores.storming,
+                    r.scores.norming,
+                    r.scores.performing
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `턱맨설문결과_${new Date().toISOString().slice(0,10)}.csv`;
+            link.click();
+        }
+
+        // Excel 내보내기 (간단한 HTML 테이블 형식)
+        function exportToExcel() {
+            const responses = getResponses();
+            if (responses.length === 0) {
+                alert('내보낼 데이터가 없습니다.');
+                return;
+            }
+            
+            let html = `
+                <table>
+                    <tr>
+                        <th>제출일시</th><th>팀명</th><th>응답자</th><th>직책</th><th>현재단계</th><th>점수</th>
+                        <th>형성기점수</th><th>혼란기점수</th><th>규범화기점수</th><th>수행기점수</th>
+                    </tr>
+            `;
+            
+            responses.forEach(r => {
+                html += `
+                    <tr>
+                        <td>${r.timestamp}</td>
+                        <td>${r.teamName}</td>
+                        <td>${r.respondentName}</td>
+                        <td>${r.respondentRole}</td>
+                        <td>${stageNames[r.currentStage]}</td>
+                        <td>${r.highestScore}</td>
+                        <td>${r.scores.forming}</td>
+                        <td>${r.scores.storming}</td>
+                        <td>${r.scores.norming}</td>
+                        <td>${r.scores.performing}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</table>';
+            
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `턱맨설문결과_${new Date().toISOString().slice(0,10)}.xls`;
+            link.click();
+        }
+
+        // 모든 데이터 삭제
+        function clearAllData() {
+            if (confirm('정말로 모든 데이터를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+                if (confirm('한 번 더 확인합니다. 모든 설문 데이터가 영구히 삭제됩니다.')) {
+                    clearAllResponses();
+                    alert('모든 데이터가 삭제되었습니다.');
+                }
+            }
+        }
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            generateSurveyQuestions();
+            loadResults();
+            loadAnalytics();
+        });
+    </script>
+</body>
+</html>
