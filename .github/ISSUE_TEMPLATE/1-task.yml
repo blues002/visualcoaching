@@ -1,0 +1,50 @@
+name: 작업
+description: 할 일 하나를 등록합니다
+labels: ["작업"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: 영역
+      options:
+        - 강의·워크숍
+        - 코칭
+        - 작은도서관·화도연
+        - 박사논문
+        - 콘텐츠
+        - 운영·행정
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 우선순위
+      options:
+        - 높음 (이번 주)
+        - 보통 (이번 달)
+        - 낮음 (여유 있을 때)
+  - type: input
+    id: due
+    attributes:
+      label: 마감일
+      placeholder: 2026-11-05
+  - type: textarea
+    id: what
+    attributes:
+      label: 무엇을 하나요
+      description: 끝났을 때 어떤 결과물이 남는지 적어 두면 나중에 판단이 쉽습니다.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 단계
+      value: |
+        - [ ] 
+        - [ ] 
+        - [ ] 
+  - type: input
+    id: slack
+    attributes:
+      label: 관련 슬랙 링크
+      description: 슬랙 대화에서 나온 작업이면 메시지 링크를 붙여 주세요.

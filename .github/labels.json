@@ -1,0 +1,14 @@
+[
+  {"name": "작업", "color": "ededed", "description": "일반 할 일"},
+  {"name": "강의·워크숍", "color": "e4572e", "description": "기관 강의, 특강, 워크숍 의뢰와 준비"},
+  {"name": "코칭", "color": "f3a712", "description": "강점·라이프·팀 코칭"},
+  {"name": "작은도서관·화도연", "color": "29bf12", "description": "작은도서관 운영, 화성시 작은도서관연합회 사업"},
+  {"name": "박사논문", "color": "4361ee", "description": "Birkbeck 연구, 논문 작업"},
+  {"name": "콘텐츠", "color": "b5179e", "description": "블로그, 인스타, 유튜브, 책, 워크북"},
+  {"name": "운영·행정", "color": "6c757d", "description": "세무, 견적, 서류, 시스템"},
+  {"name": "우선순위: 높음", "color": "d00000", "description": "이번 주 안에 꼭"},
+  {"name": "우선순위: 보통", "color": "ffba08", "description": "이번 달 안에"},
+  {"name": "우선순위: 낮음", "color": "a3cef1", "description": "여유 있을 때"},
+  {"name": "대기", "color": "c5c5c5", "description": "상대 답변이나 자료를 기다리는 중"},
+  {"name": "슬랙", "color": "4a154b", "description": "슬랙 대화에서 나온 작업"}
+]
